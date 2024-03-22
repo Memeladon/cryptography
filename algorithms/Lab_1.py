@@ -37,15 +37,18 @@ class Lab_1:
             return gcd_value, y - (b // a) * x, x
 
     @staticmethod
-    def find_inverse_element(a: int, m: int):
+    def find_inverse_element(a: int, m: int) -> int:
         """
          функция находит обратный элемент для a (mod m) с использованием расширенного алгоритма Евклида
          :param a: int
          :param m: int
          :return Элемент обратный x по модулю m
         """
-        _, x, _ = Lab_1.extended_gcd(a, m)
-        return x % m
+        g, x, y = Lab_1.extended_gcd(a, m)
+        if g != 1:
+            raise Exception('Обратной величины не существует')
+        else:
+            return x % m
 
     @staticmethod
     def phi(n: int):
@@ -54,7 +57,7 @@ class Lab_1:
         :param n: int
         :return Значение функции Эйлера для числа n
         """
-        if n is not int:
+        if type(n) is not int:
             print('Параметр [n] не определен на множестве простых чисел!')
             return TypeError
         result = 1
@@ -102,8 +105,8 @@ class Lab_1:
         :return: Частные решения x0, y0
         """
         gcd_value, x, y = Lab_1.extended_gcd(a, b)
-
         if c % gcd_value != 0:
+            print(f"{c} mod НОД{a,b} = {c%gcd_value}")
             print(f"Решение уравнения {a}x + {b}y = {c} отсутствует")
             return None
 
@@ -112,6 +115,7 @@ class Lab_1:
         y0 = y * (c // gcd_value)
 
         print(f"Решение уравнения {a}x + {b}y = {c}: (x = {x0}, y = {y0})")
+        print(f"ОБРАТНЫЙ ЕВКЛИД: НОД{a,b} = {gcd_value}, {x}a+{y}b=НОД{a,b}")
         return x0, y0
 
     @staticmethod
