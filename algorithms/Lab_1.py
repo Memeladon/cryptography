@@ -37,6 +37,31 @@ class Lab_1:
             return gcd_value, y - (b // a) * x, x
 
     @staticmethod
+    def half_extended_euclidean(a, b):
+        """
+        https://crypto.stackexchange.com/questions/54444/how-to-optimise-euclidean-algorithm-for-large-numbers-rsa
+        :return: m, x, y , где ax+by=НОД(a,b), m - изначальный модуль
+        """
+        x, y, m = 0, 1, b
+
+        while True:
+            if a == 1:
+                return m, x, y
+            elif a == 0:
+                return None
+
+            q = b // a
+            b, x = b - a * q, x + q * y
+
+            if b == 1:
+                return m - x, x, y
+            elif b == 0:
+                return None
+
+            q = a // b
+            a, y = a - b * q, y + q * x
+
+    @staticmethod
     def find_inverse_element(a: int, m: int) -> int:
         """
          функция находит обратный элемент для a (mod m) с использованием расширенного алгоритма Евклида
@@ -75,9 +100,14 @@ class Lab_1:
         :return: Является ли g первообразным корнем по модулю m
         """
         powers = set()
+
+        print(Lab_1.gcd(g, m))
+        if Lab_1.gcd(g, m) == 1:
+            return False
+
         for i in range(1, m):
             powers.add(pow(g, i, m))
-        # print(powers)
+        print(g, powers)
         return len(powers) == m - 1
 
     @staticmethod
@@ -106,7 +136,7 @@ class Lab_1:
         """
         gcd_value, x, y = Lab_1.extended_gcd(a, b)
         if c % gcd_value != 0:
-            print(f"{c} mod НОД{a,b} = {c%gcd_value}")
+            print(f"{c} mod НОД{a, b} = {c % gcd_value}")
             print(f"Решение уравнения {a}x + {b}y = {c} отсутствует")
             return None
 
@@ -114,8 +144,10 @@ class Lab_1:
         x0 = x * (c // gcd_value)
         y0 = y * (c // gcd_value)
 
+        print(f"{x} * ({c} // {gcd_value})")
+        print(f"{y} * ({c} // {gcd_value})")
         print(f"Решение уравнения {a}x + {b}y = {c}: (x = {x0}, y = {y0})")
-        print(f"ОБРАТНЫЙ ЕВКЛИД: НОД{a,b} = {gcd_value}, {x}a+{y}b=НОД{a,b}")
+        print(f"ОБРАТНЫЙ ЕВКЛИД: НОД{a, b} = {gcd_value}, {x}a+{y}b=НОД{a, b}")
         return x0, y0
 
     @staticmethod
