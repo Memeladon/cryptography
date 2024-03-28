@@ -37,29 +37,19 @@ class Lab_1:
             return gcd_value, y - (b // a) * x, x
 
     @staticmethod
-    def half_extended_euclidean(a, b):
-        """
-        https://crypto.stackexchange.com/questions/54444/how-to-optimise-euclidean-algorithm-for-large-numbers-rsa
-        :return: m, x, y , где ax+by=НОД(a,b), m - изначальный модуль
-        """
-        x, y, m = 0, 1, b
-
-        while True:
-            if a == 1:
-                return m, x, y
-            elif a == 0:
-                return None
-
-            q = b // a
-            b, x = b - a * q, x + q * y
-
-            if b == 1:
-                return m - x, x, y
-            elif b == 0:
-                return None
-
+    def bezout(a, b):
+        '''
+        Реализация расширенного евклидова алгоритма.
+        Возвращает целые числа x, y и gcd(a, b) для уравнения Безу:
+            ax + by = gcd(a, b).
+        '''
+        x, xx, y, yy = 1, 0, 0, 1
+        while b:
             q = a // b
-            a, y = a - b * q, y + q * x
+            a, b = b, a % b
+            x, xx = xx, x - xx * q
+            y, yy = yy, y - yy * q
+        return a, x, y
 
     @staticmethod
     def find_inverse_element(a: int, m: int) -> int:
